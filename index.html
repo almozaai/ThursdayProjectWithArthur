@@ -1,6 +1,9 @@
 <html>
     <head>
         <style>
+            h1 {
+              text-transform: uppercase;
+            }
             #products {
                 display: flex;
                 flex-wrap: wrap;
@@ -11,6 +14,12 @@
                 background-color: tomato;
                 border: 5px solid #fff;
                 box-sizing: border-box;
+                text-align: center;
+            }
+            ul {
+              margin-top: 50px;
+              margin-bottom: 10px;
+              list-style: none;
             }
         </style>
     </head>
@@ -30,21 +39,23 @@
         fetch('https://acme-users-api-rev.herokuapp.com/api/offerings')
       ]);
 
+
       const [ products, companies, offerings ] = await Promise.all(responses.map( response =>response.json()));
-
-
 
       const html = products.map(product => {
           const offers = offerings.filter(offering => offering.productId === product.id );
 
-          //console.log('offers', offers);
 
+
+          let list = ''
           const mapOffers = offers.map(offer => {
             const offerCompany = companies.find(company => offer.companyId === company.id);
+            list += `<li>Offered by: ${offerCompany.name} at ${offer.price} $`
+              console.log(offerCompany)
             return offerCompany;
           })
 
-          console.log('mapOffers', mapOffers);
+          // console.log('mapOffers', mapOffers);
         return `
           <div class="product-card">
             <h1>${product.name}</h1>
@@ -54,7 +65,9 @@
             <div>
               $${product.suggestedPrice}
             </div>
-
+            <ul>
+              ${list}
+            </ul>
           </div>
         `;
       }).join('');
