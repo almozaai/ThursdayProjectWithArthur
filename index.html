@@ -35,14 +35,16 @@
 
 
       const html = products.map(product => {
-          const offers = offerings.filter(offering => offering.productId === product.id )
+          const offers = offerings.filter(offering => offering.productId === product.id );
+
+          //console.log('offers', offers);
+
           const mapOffers = offers.map(offer => {
-            return companies.filter(company => offer.companyId === company.id)
+            const offerCompany = companies.find(company => offer.companyId === company.id);
+            return offerCompany;
           })
 
-          //
-          // console.log(_companies)
-
+          console.log('mapOffers', mapOffers);
         return `
           <div class="product-card">
             <h1>${product.name}</h1>
