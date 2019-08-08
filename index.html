@@ -21,22 +21,37 @@
 
   <script>
     // global variables
-    const dataCompany = async () => {
+    const loadData = async () => {
+      const productsDiv = document.querySelector('#products');
+
       const responses = await Promise.all([
         fetch('https://acme-users-api-rev.herokuapp.com/api/products'),
         fetch('https://acme-users-api-rev.herokuapp.com/api/companies'),
         fetch('https://acme-users-api-rev.herokuapp.com/api/offerings')
-      ])
-      const [products, companies, offerings] = await Promise.all( responses.map( response =>response.json()))
-      console.log(products)
-      console.log(companies)
-      console.log(offerings)
+      ]);
 
-    }
-    dataCompany()
-    const API = 'https://acme-users-api-rev.herokuapp.com/api/offerings'; // to use as a base for any API calls
-    let id = ''; // id of product - how will our app change this?
-    let data = []; // list of products - where will this data come from?
+      const [ products, companies, offerings ] = await Promise.all(responses.map( response =>response.json()));
+
+      const html = products.map(product => {
+        return `
+          <div class="product-card">
+            <h1>${product.name}</h1>
+            <div>
+              ${product.description}
+            </div>
+            <div>
+              $${product.suggestedPrice}
+            </div>
+          </div>
+        `;
+      }).join('');
+      productsDiv.innerHTML = html;
+    };
+
+    loadData();
+
+    //let id = ''; // id of product - how will our app change this?
+    //let data = []; // list of products - where will this data come from?
 
     // define event listeners (i.e. 'hashchange')
 
