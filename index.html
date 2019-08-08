@@ -32,7 +32,17 @@
 
       const [ products, companies, offerings ] = await Promise.all(responses.map( response =>response.json()));
 
+
+
       const html = products.map(product => {
+          const offers = offerings.filter(offering => offering.productId === product.id )
+          const mapOffers = offers.map(offer => {
+            return companies.filter(company => offer.companyId === company.id)
+          })
+
+          //
+          // console.log(_companies)
+
         return `
           <div class="product-card">
             <h1>${product.name}</h1>
@@ -42,6 +52,7 @@
             <div>
               $${product.suggestedPrice}
             </div>
+
           </div>
         `;
       }).join('');
